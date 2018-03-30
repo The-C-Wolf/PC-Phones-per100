@@ -1,4 +1,4 @@
-# DevelopmentofDigitalisation
+# Development of Digitalisation
 
 Data analysis and visualisation of two datasets. One that describes the amount of Personal Computers and the other one the amount of Mobile Phones per 100 people.
 
