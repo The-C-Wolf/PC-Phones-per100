@@ -14,22 +14,32 @@ PATH = "C:/Users/HP/Desktop/PC-Phones-per100-master/"
 '''Daten als Dataframes einlesen'''
 df_pc = pd.read_excel(PATH+"pc.xlsx", index_col=0)
 df_phone = pd.read_excel(PATH+"phone.xlsx", index_col=0)
+df_gni = pd.read_excel(PATH+"GNI.xlsx", index_col=0)
 
 '''Indexnamen kürzen'''
 df_phone.index.name = "Mobile phones per 100"
 
-'''df.phone hat Strings als Index! - Umwandlung zu Integer'''
-ncol = [int(x) for x in df_phone.columns]
-df_phone.set_axis(axis=1, labels=ncol, inplace=True)
+'''df.phone und df_gni haben Strings als Index! - Umwandlung zu Integer'''
+ncol1 = [int(x) for x in df_phone.columns]
+df_phone.set_axis(axis=1, labels=ncol1, inplace=True)
+ncol2 = [int(x) for x in df_gni.columns]
+df_gni.set_axis(axis=1, labels=ncol2, inplace=True)
+
+'''Index-Namen anpassen'''
+df_gni = df_gni.rename(index={'Russian Federation': 'Russia'})
 
 '''Jahre auswählen'''
 years = list(range(1994,2007))
 df_pc_years = df_pc[years]
 df_phone_years = df_phone[years]
+df_gni = df_gni[years]
 
 '''hierarchischen Index erstellen'''
 sdf_pc_years = df_pc_years .stack()
 sdf_phone_years = df_phone_years .stack()
+sdf_gni = df_gni.stack()
+
+#df_gni = sdf_gni.unstack(1)
 
 '''Series zu Dataframe verbinden, mithilfe eines dictionaries'''
 d = {'PC': sdf_pc_years, 'Phones': sdf_phone_years}
@@ -39,25 +49,26 @@ df_years = df_years.unstack((1,2))
 
 #df_years.to_csv('data.csv')
 '''Länderauswahl treffen'''
-länderliste1 = ['Germany','Russia','United States','China','United Kingdom','Japan']
-länderliste2 = ['France','Australia','Bolivia','Ghana']
-länderliste3 = ['Austria','Hungary','Germany']
+länderliste1 = ['Germany','Russia','United States']
+länderliste2 = ['France','Australia','Bolivia','Ghana','China','United Kingdom','Japan']
+länderliste3 = ['Austria','Hungary','Germany','Bolivia','Russia']
 
-countries = länderliste3
+countries = länderliste1        ##### hier die entsprechende Liste auswählen
+countries_name = 'länderliste1' ##### hier die entsprechende Liste auswählen
 
-def scatterplot(list):
+def scatterplot(list, name):
     for country in list[:]:
-        plt.scatter(df_years.loc[country].unstack(1)['PC'], df_years.loc[country].unstack(1)['Phones'], label=country)
+        plt.scatter(df_years.loc[country].unstack(1)['PC'], df_years.loc[country].unstack(1)['Phones'], s= df_gni.loc[country]/200, label=country)
     plt.legend()
     plt.ylabel('Mobile Phones')
     plt.xlabel('PC')
     plt.axis([0,100,0,150])
     plt.grid(True)
     plt.title('Entwicklung der Gerätezahlen von 1994 bis 2006 pro 100 Einwohner')
-    plt.savefig('scatter_94bis06PCvsPhones.png')
+    plt.savefig(name+'scatterplot.png', dpi=900)
     plt.show()
 
-def lineplot_pc(list):
+def lineplot_pc(list, name):
     for country in list[:]:
         plt.plot(df_years.loc[country].unstack(1).index, df_years.loc[country].unstack(1)['PC'], label=country)
     plt.legend()
@@ -66,10 +77,10 @@ def lineplot_pc(list):
     plt.axis([1994, 2006, 0,150])
     plt.grid(True)
     plt.title('Entwicklung der Gerätezahlen von 1994 bis 2006 pro 100 Einwohner')
-    plt.savefig('lineplot_pc.png')
+    plt.savefig(name+'lineplot_pc.png', dpi=900)
     plt.show()
 
-def lineplot_phones(list):
+def lineplot_phones(list, name):
     for country in list[:]:
         plt.plot(df_years.loc[country].unstack(1).index, df_years.loc[country].unstack(1)['Phones'], label=country)
     plt.legend()
@@ -78,11 +89,32 @@ def lineplot_phones(list):
     plt.axis([1994, 2006, 0,150])
     plt.grid(True)
     plt.title('Entwicklung der Gerätezahlen von 1994 bis 2006 pro 100 Einwohner')
-    plt.savefig('lineplot_phones.png')
+    plt.savefig(name+'lineplot_phones.png',dpi=900)
     plt.show()
  
     
 '''Plots erstellen'''   
-scatterplot(countries)
-lineplot_pc(countries)
-lineplot_phones(countries)
+scatterplot(countries, countries_name)
+lineplot_pc(countries, countries_name)
+#lineplot_phones(countries, countries_name)
+'''
+for country in countries[:]:
+   plt.scatter(df_gni.loc[country], df_years.loc[country].unstack(1)['Phones'], label=country)
+plt.legend()
+plt.ylabel('Mobile Phones')
+plt.xlabel('GNI')
+plt.grid(True)
+plt.title('Entwicklung der Gerätezahlen von 1994 bis 2006 pro 100 Einwohner ggü dem Bruttosozialprodukt')
+plt.savefig('scatterplot_GNI_Phones.png', dpi=900)
+plt.show()
+
+for country in countries[:]:
+   plt.scatter(df_gni.loc[country], df_years.loc[country].unstack(1)['PC'], label=country)
+plt.legend()
+plt.ylabel('PC')
+plt.xlabel('GNI')
+plt.grid(True)
+plt.title('Entwicklung der Gerätezahlen von 1994 bis 2006 pro 100 Einwohner ggü dem Bruttosozialprodukt')
+plt.savefig('scatterplot_GNI_PC.png', dpi=900)
+plt.show()
+'''
