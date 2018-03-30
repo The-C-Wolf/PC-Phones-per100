@@ -42,7 +42,7 @@ sdf_gni = df_gni.stack()
 #df_gni = sdf_gni.unstack(1)
 
 '''Series zu Dataframe verbinden, mithilfe eines dictionaries'''
-d = {'PC': sdf_pc_years, 'Phones': sdf_phone_years}
+d = {'PC': sdf_pc_years, 'Phones': sdf_phone_years, 'GNI' : sdf_gni}
 df_years = pd.DataFrame(data=d)
 df_years = df_years.stack()
 df_years = df_years.unstack((1,2))
@@ -51,20 +51,20 @@ df_years = df_years.unstack((1,2))
 '''Länderauswahl treffen'''
 länderliste1 = ['Germany','Russia','United States']
 länderliste2 = ['France','Australia','Bolivia','Ghana','China','United Kingdom','Japan']
-länderliste3 = ['Austria','Hungary','Germany','Bolivia','Russia']
+länderliste3 = ['France','Germany', 'Hungary','Bolivia','Russia']
 
-countries = länderliste1        ##### hier die entsprechende Liste auswählen
-countries_name = 'länderliste1' ##### hier die entsprechende Liste auswählen
+countries = länderliste3        ##### hier die entsprechende Liste auswählen
+countries_name = 'länderliste3' ##### hier die entsprechende Liste auswählen
 
 def scatterplot(list, name):
     for country in list[:]:
-        plt.scatter(df_years.loc[country].unstack(1)['PC'], df_years.loc[country].unstack(1)['Phones'], s= df_gni.loc[country]/200, label=country)
-    plt.legend()
+        plt.scatter(df_years.loc[country].unstack(1)['PC'], df_years.loc[country].unstack(1)['Phones'], s= df_years.loc[country].unstack(1)['GNI']/200, label=country)
+    plt.legend(loc=0)
     plt.ylabel('Mobile Phones')
-    plt.xlabel('PC')
+    plt.xlabel('PCs')
     plt.axis([0,100,0,150])
     plt.grid(True)
-    plt.title('Entwicklung der Gerätezahlen von 1994 bis 2006 pro 100 Einwohner')
+    plt.title('PCs und Mobiltelefone 1994-2006 pro 100 Einwohner (Punktgröße:BSP)')
     plt.savefig(name+'scatterplot.png', dpi=900)
     plt.show()
 
@@ -72,11 +72,11 @@ def lineplot_pc(list, name):
     for country in list[:]:
         plt.plot(df_years.loc[country].unstack(1).index, df_years.loc[country].unstack(1)['PC'], label=country)
     plt.legend()
-    plt.ylabel('PC')
+    plt.ylabel('PCs')
     plt.xlabel('Jahre')
     plt.axis([1994, 2006, 0,150])
     plt.grid(True)
-    plt.title('Entwicklung der Gerätezahlen von 1994 bis 2006 pro 100 Einwohner')
+    plt.title('PCs 1994 bis 2006 pro 100 Einwohner')
     plt.savefig(name+'lineplot_pc.png', dpi=900)
     plt.show()
 
@@ -88,33 +88,25 @@ def lineplot_phones(list, name):
     plt.xlabel('Jahre')
     plt.axis([1994, 2006, 0,150])
     plt.grid(True)
-    plt.title('Entwicklung der Gerätezahlen von 1994 bis 2006 pro 100 Einwohner')
+    plt.title('Mobiltelefone von 1994 bis 2006 pro 100 Einwohner')
     plt.savefig(name+'lineplot_phones.png',dpi=900)
+    plt.show()
+    
+def lineplot_GNI(list, name):
+    for country in list[:]:
+        plt.plot(df_years.loc[country].unstack(1).index, df_years.loc[country].unstack(1)['GNI'], label=country)
+    plt.legend()
+    plt.ylabel('BSP')
+    plt.xlabel('Jahre')
+    plt.axis([1994, 2006, 0,50000])
+    plt.grid(True)
+    plt.title('Entwicklung des BSP von 1994 bis 2006')
+    plt.savefig(name+'lineplot_BSP.png',dpi=900)
     plt.show()
  
     
 '''Plots erstellen'''   
 scatterplot(countries, countries_name)
 lineplot_pc(countries, countries_name)
-#lineplot_phones(countries, countries_name)
-'''
-for country in countries[:]:
-   plt.scatter(df_gni.loc[country], df_years.loc[country].unstack(1)['Phones'], label=country)
-plt.legend()
-plt.ylabel('Mobile Phones')
-plt.xlabel('GNI')
-plt.grid(True)
-plt.title('Entwicklung der Gerätezahlen von 1994 bis 2006 pro 100 Einwohner ggü dem Bruttosozialprodukt')
-plt.savefig('scatterplot_GNI_Phones.png', dpi=900)
-plt.show()
-
-for country in countries[:]:
-   plt.scatter(df_gni.loc[country], df_years.loc[country].unstack(1)['PC'], label=country)
-plt.legend()
-plt.ylabel('PC')
-plt.xlabel('GNI')
-plt.grid(True)
-plt.title('Entwicklung der Gerätezahlen von 1994 bis 2006 pro 100 Einwohner ggü dem Bruttosozialprodukt')
-plt.savefig('scatterplot_GNI_PC.png', dpi=900)
-plt.show()
-'''
+lineplot_phones(countries, countries_name)
+lineplot_GNI(countries, countries_name)
