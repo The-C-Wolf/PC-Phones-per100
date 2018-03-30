@@ -41,8 +41,9 @@ df_years = df_years.unstack((1,2))
 '''Länderauswahl treffen'''
 länderliste1 = ['Germany','Russia','United States','China','United Kingdom','Japan']
 länderliste2 = ['France','Australia','Bolivia','Ghana']
+länderliste3 = ['Austria','Hungary','Germany']
 
-countries = länderliste2
+countries = länderliste3
 
 def scatterplot(list):
     for country in list[:]:
@@ -85,32 +86,3 @@ def lineplot_phones(list):
 scatterplot(countries)
 lineplot_pc(countries)
 lineplot_phones(countries)
-
-#df_years[2006]['PC'] #Jahr und Gerät auswählen
-#df = df.stack() #Indizes aufstapeln
-#df3 = df.unstack(1) #breite Tabelle erstellen
-
-#df3.index.names = ['Countries', 'Devices'] #multiIndex schöner machen
-
-#df3.plot.bar(figsize=(10,18))
-#plt.savefig('Countries_Devices_over_years_barplot.png')
-
-#df_1994 = df3[1994].unstack(1) #Jahr 1994 auswählen
-#df_1998 = df3[1998].unstack(1) #Jahr 2000 auswählen
-#df_2002 = df3[2002].unstack(1) #Jahr 2002 auswählen
-#df_2006 = df3[2006].unstack(1) #Jahr 2006 auswählen
-
-
-#df_1994.plot.bar(figsize=(6,5))
-#plt.savefig('1994_Balken.png')
-#df_1998.plot.bar(figsize=(6,5))
-#plt.savefig('1998_Balken.png')
-#df_2002.plot.bar(figsize=(6,5))
-#plt.savefig('2002_Balken.png')
-#df_2006.plot.bar(figsize=(6,5))
-#plt.savefig('2006_Balken.png')
-
-#df4 = df.unstack((0,2))
-
-#df3[[1995,2000,2005]].plot.bar()
-
