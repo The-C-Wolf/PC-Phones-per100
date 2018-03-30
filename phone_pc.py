@@ -2,14 +2,13 @@
 """
 Created on Sat Mar 17 21:46:03 2018
 
-@author: The
+@author: HP
 """
 
 import pandas as pd
 import pylab as plt
 
 PATH = "C:/Users/HP/Desktop/PC-Phones-per100-master/"
-
 
 '''Daten als Dataframes einlesen'''
 df_pc = pd.read_excel(PATH+"pc.xlsx", index_col=0)
@@ -39,7 +38,6 @@ sdf_pc_years = df_pc_years .stack()
 sdf_phone_years = df_phone_years .stack()
 sdf_gni = df_gni.stack()
 
-#df_gni = sdf_gni.unstack(1)
 
 '''Series zu Dataframe verbinden, mithilfe eines dictionaries'''
 d = {'PC': sdf_pc_years, 'Phones': sdf_phone_years, 'GNI' : sdf_gni}
@@ -49,12 +47,12 @@ df_years = df_years.unstack((1,2))
 
 #df_years.to_csv('data.csv')
 '''Länderauswahl treffen'''
-länderliste1 = ['Germany','Russia','United States']
-länderliste2 = ['France','Australia','Bolivia','Ghana','China','United Kingdom','Japan']
-länderliste3 = ['France','Germany', 'Hungary','Bolivia','Russia']
+länderliste1 = ['Germany','Russia','United States', 'China']
+länderliste2 = ['France','Australia', 'Ghana','United Kingdom','Japan']
+länderliste3 = ['Germany','India', 'Canada','Mexico','Spain']
 
-countries = länderliste3        ##### hier die entsprechende Liste auswählen
-countries_name = 'länderliste3' ##### hier die entsprechende Liste auswählen
+countries = länderliste3        ##### hier die entsprechend gewünschte Liste auswählen
+countries_name = 'länderliste3' ##### hier die entsprechend gewünschte Liste auswählen
 
 def scatterplot(list, name):
     for country in list[:]:
@@ -64,7 +62,7 @@ def scatterplot(list, name):
     plt.xlabel('PCs')
     plt.axis([0,100,0,150])
     plt.grid(True)
-    plt.title('PCs und Mobiltelefone 1994-2006 pro 100 Einwohner (Punktgröße:BSP)')
+    plt.title('PCs & Mobiltelefone 94-06 pro 100 Einwohner (Punktgröße:BSP)')
     plt.savefig(name+'scatterplot.png', dpi=900)
     plt.show()
 
